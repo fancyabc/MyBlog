@@ -9,11 +9,11 @@ from .base import *
 # 本选项（DEBUG）仅在开发过程中打开
 
 
-DEBUG = TRUE
+DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
+# 需要（你开发的环境）已经安装了sqlite3
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
