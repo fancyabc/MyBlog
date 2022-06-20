@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import re_path
 from django.contrib.sitemaps import views as sitemap_views
 
+from .auto_complete import CategoryAutocomplete,TagAutocomplete
+
 from blog.views import (
     PostDetailView,TagView,
     IndexView,CategoryView,
@@ -41,4 +43,6 @@ urlpatterns = [
     re_path(r'^comment/$', CommentView.as_view(), name='comment'),
     re_path(r'^rss|feed/', LatestPostFeed(), name='rss'),
     re_path(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
+    re_path(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
+    re_path(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
 ]
