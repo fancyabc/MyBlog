@@ -6,6 +6,7 @@ from django.utils.html import format_html
 from .models import Post, Category, Tag
 from .adminform import PostAdminForm
 from MyBlog.custom_site import custom_site
+from MyBlog.base_admin import BaseOwnerAdmin
 # Register your models here.
 
 
@@ -17,15 +18,11 @@ class PostInline(admin.TabularInline):  # StackedInline样式不同
 
 
 @admin.register(Category, site=custom_site)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
     inlines = [PostInline, ]
 
     list_display = ('name', 'status', 'is_nav', 'created_time')
     fields = ('name', 'status', 'is_nav')   # 控制页面上要展示的字段
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
 
     def post_count(self, obj):
         return obj.post_set.count()
@@ -34,18 +31,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag, site=custom_site)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
-
-    """ request.user 当前已经登陆的用户，
-        obj 当前要保存的对象
-        form 页面提交过来的表单之后的对象
-        change 标志本次保存的数据是新增的还是更新的
-    """
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -67,7 +55,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
 
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
     # 使用自定义Form
     form = PostAdminForm
 
@@ -125,19 +113,10 @@ class PostAdmin(admin.ModelAdmin):
 
     operator.short_description = "操作"
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user    # 在此设置，文章的拥有者是当前登录用户
-        return super(PostAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)    # 只显示本登录者
-
     '''引入自定义静态资源'''
-    '''
+
     class Media:
         css = {
             'all':("https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",),
         }
         js = ("https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",)
-        '''
