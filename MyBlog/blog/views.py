@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView, ListView
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.db.models import Q,F
 from django.core.cache import cache
 
 # Create your views here.
