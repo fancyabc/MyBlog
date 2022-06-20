@@ -37,17 +37,35 @@ class TagAdmin(admin.ModelAdmin):
         return super(TagAdmin, self).save_model(request, obj, form, change)
 
 
+class CategoryOwnerFilter(admin.SimpleListFilter):
+    """自定义过滤器只展示单前用户分类"""
+
+    title = '分类过滤器'    # 由 SimpleListFilter 类提供
+    parameter_name = 'owner_category'   # 由 SimpleListFilter 类提供
+
+    # 由 SimpleListFilter 类提供，返回要展示的内容和查询用的id
+    def lookups(self,request, model_admin):
+        return Category.objects.filter(owner=request.user).values_list('id', 'name')
+
+    # 由 SimpleListFilter 类提供，根据URL Query的内容返回列表页数据
+    def queryset(self, request, queryset):
+        category_id = self.value()
+        if category_id:
+            return queryset.filter(category_id=self.value())
+        return queryset
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
 
     list_display = [
         'title','category','status',
-        'created_time', 'operator'
+        'created_time', 'owner','operator'
     ]
     list_display_links = []     # 配置哪些字段可以作为链接，点击它们就可以进入编辑页面
 
-    list_filter = ['category',] # 配置页面过滤器，需要哪些字段来过滤表页
+#    list_filter = ['category',] # 配置页面过滤器，需要哪些字段来过滤表页
+    list_filter = [CategoryOwnerFilter] # 使用上面那个过滤器
 
     search_fields = ['title','category__name']  # 配置搜索字段
 
