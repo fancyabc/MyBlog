@@ -19,7 +19,7 @@ from django.urls import re_path
 from blog.views import (
     PostDetailView,TagView,
     IndexView,CategoryView,
-    SearchView
+    SearchView,AuthorView
 )
 from config.views import links
 from .custom_site import custom_site
@@ -33,4 +33,5 @@ urlpatterns = [
     re_path(r'^super_admin/', admin.site.urls, name='super-admin'), # 系统管理员，管理用户
     re_path(r'^admin/', custom_site.urls, name='admin'), # 管理业务
     re_path(r'^search/$', SearchView.as_view(), name='search'),
+    re_path(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
 ]
