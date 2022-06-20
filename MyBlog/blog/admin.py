@@ -5,6 +5,7 @@ from django.utils.html import format_html
 
 from .models import Post, Category, Tag
 from .adminform import PostAdminForm
+from MyBlog.custom_site import custom_site
 # Register your models here.
 
 
@@ -15,7 +16,7 @@ class PostInline(admin.TabularInline):  # StackedInline样式不同
     model = Post
 
 
-@admin.register(Category)
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [PostInline, ]
 
@@ -32,7 +33,7 @@ class CategoryAdmin(admin.ModelAdmin):
     post_count.short_description = "文章数量"
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
@@ -65,7 +66,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
     # 使用自定义Form
     form = PostAdminForm
@@ -87,7 +88,7 @@ class PostAdmin(admin.ModelAdmin):
     # 编辑页面
     save_on_top = True
 
-#    exclude = ['owner']
+    exclude = ('owner',)
 
     '''
     # fields配置有两个作用：1限定展示要显示的字段，2配置显示字段的顺序
@@ -104,6 +105,7 @@ class PostAdmin(admin.ModelAdmin):
             'fields':(
                 ('title','category'),
                 'status',
+                'tag',
             ),
         }),
         ('内容信息',{
@@ -111,17 +113,14 @@ class PostAdmin(admin.ModelAdmin):
                 'desc',
                 'content',
             ),
-        }),
-        ('额外信息',{
-            'classes':('collapse',),
-            'fields':('tag',),
-        })
+        }),       
     )
+    filter_vertical = ('tag',)
 
     def operator(self, obj):
         return format_html(
             '<a href="{}">编辑</a>',
-            reverse('admin:blog_post_change', args=(obj.id,))
+            reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
 
     operator.short_description = "操作"
@@ -135,8 +134,10 @@ class PostAdmin(admin.ModelAdmin):
         return qs.filter(owner=request.user)    # 只显示本登录者
 
     '''引入自定义静态资源'''
+    '''
     class Media:
         css = {
             'all':("https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",),
         }
         js = ("https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",)
+        '''
