@@ -22,6 +22,7 @@ from blog.views import (
     SearchView,AuthorView
 )
 from config.views import LinkListView
+from comment.views import CommentView
 from .custom_site import custom_site
 
 urlpatterns = [
@@ -34,4 +35,5 @@ urlpatterns = [
     re_path(r'^search/$', SearchView.as_view(), name='search'),
     re_path(r'^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
     re_path(r'^links/$', LinkListView.as_view(), name='links'),
+    re_path(r'^comment/$', CommentView.as_view(), name='comment'),
 ]

@@ -7,6 +7,8 @@ from django.db.models import Q
 # Create your views here.
 from blog.models import Post,Tag,Category
 from config.models import SideBar
+from comment.forms import CommentForm
+from comment.models import Comment
 
 '''
 class PostListView(ListView):
@@ -76,6 +78,7 @@ class PostDetailView(CommonViewMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
     pk = 'post__id'
+
 
 
 class SearchView(IndexView):
