@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+import mistune
 
 # 每个Moddel相当于数据库中的一个数据表，Field相当于数据库中的一个字段
 
@@ -90,6 +91,7 @@ class Post(models.Model):
     tag = models.ManyToManyField(Tag, verbose_name="标签")
     owner = models.ForeignKey(User, verbose_name="作者", on_delete=models.DO_NOTHING)
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+    content_html = models.TextField(verbose_name="正文html代码", blank=True, editable=False)
 
     pv = models.PositiveIntegerField(default=1)
     uv = models.PositiveIntegerField(default=1)
@@ -132,6 +134,10 @@ class Post(models.Model):
         if with_related:
             queryset = queryset.select_related('owner','category')
         return queryset
+
+    def save(self, *args, **kwargs):
+        self.content_html = mistune.markdown(self.content)
+        super().save(*args, **kwargs)
 
     @classmethod
     def hot_posts(cls):
