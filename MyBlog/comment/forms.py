@@ -1,5 +1,6 @@
 from django import forms
 
+import mistune
 from .models import Comment
 
 
@@ -38,6 +39,7 @@ class CommentForm(forms.ModelForm):
         if len(content) < 10:
             raise forms.ValidationError('太短啦,禁止灌水！')
         # 进行数据转换（Markown格式）
+        content = mistune.markdown(content)
         return content
 
 
