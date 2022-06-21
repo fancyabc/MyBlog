@@ -8,7 +8,7 @@ from .serializers import(
 ) 
 
 
-class PostViewSet(viewsets.ReadOnlyModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     """提供文章接口"""
     serializer_class = PostSerializer # serializer_class 所有的数据都会通过这个配置进行序列化，通过重写详情数据的接口，然后指定 serializer_class
     queryset = Post.objects.filter(status=Post.STATUS_NORMAL)
