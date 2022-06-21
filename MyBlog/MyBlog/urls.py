@@ -35,10 +35,11 @@ from blog.sitemap import PostSitemap
 from config.views import LinkListView
 from comment.views import CommentView
 from .custom_site import custom_site
-from blog.apis import PostViewSet
+from blog.apis import PostViewSet, CategoryViewSet
 
 router = DefaultRouter()
 router.register(r'post', PostViewSet, basename='api-post')
+router.register(r'category', CategoryViewSet, basename='api-category')
 
 urlpatterns = [
     re_path(r'^$',IndexView.as_view(),name='index'),
