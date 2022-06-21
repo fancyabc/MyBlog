@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CKEDITOR_UPLOAD_PATH = "artical_images"
 
 DEFAULT_FILE_STORAGE = 'MyBlog.storage.WatermarkStorage'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}

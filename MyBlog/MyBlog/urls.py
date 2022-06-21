@@ -20,6 +20,8 @@ from django.contrib.sitemaps import views as sitemap_views
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 from .auto_complete import CategoryAutocomplete,TagAutocomplete
 
@@ -33,6 +35,10 @@ from blog.sitemap import PostSitemap
 from config.views import LinkListView
 from comment.views import CommentView
 from .custom_site import custom_site
+from blog.apis import PostViewSet
+
+router = DefaultRouter()
+router.register(r'post', PostViewSet, basename='api-post')
 
 urlpatterns = [
     re_path(r'^$',IndexView.as_view(),name='index'),
@@ -50,4 +56,7 @@ urlpatterns = [
     re_path(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
     re_path(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
+    re_path(r'^api/', include(router.urls)),
+    re_path(r'^api/docs/', include_docs_urls(title='MyBlog apis')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
