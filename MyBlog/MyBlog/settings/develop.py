@@ -32,6 +32,8 @@ MIDDLEWARE += [
 
 INTERNAL_IPS = ['127.0.0.1']
 
+'''
 DEBUG_TOOLBAR_PANELS = [
     'pympler.panels.MemoryPanel',
 ]
+'''
