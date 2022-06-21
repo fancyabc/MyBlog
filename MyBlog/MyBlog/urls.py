@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import re_path
 from django.contrib.sitemaps import views as sitemap_views
 
+from django.conf import settings
+from django.conf.urls import include
+from django.conf.urls.static import static
+
 from .auto_complete import CategoryAutocomplete,TagAutocomplete
 
 from blog.views import (
@@ -45,4 +49,5 @@ urlpatterns = [
     re_path(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
     re_path(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
     re_path(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
-]
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

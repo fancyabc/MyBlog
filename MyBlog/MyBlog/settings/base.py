@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
     'dal',
     'dal_select2',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,19 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 800,
+        'tabSpace': 4,
+        'extraPluguns': 'codesnippet',  # 配置代码插件
+    },
+}
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+CKEDITOR_UPLOAD_PATH = "artical_images"
+
+DEFAULT_FILE_STORAGE = 'MyBlog.storage.WatermarkStorage'

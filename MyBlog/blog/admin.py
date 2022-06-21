@@ -101,6 +101,8 @@ class PostAdmin(BaseOwnerAdmin):
         ('内容信息',{
             'fields':(
                 'desc',
+                'content_ck',
+                'content_md',
                 'content',
             ),
         }),       
